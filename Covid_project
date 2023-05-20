@@ -1,0 +1,9 @@
+--Creating View to store data for visualizations
+CREATE VIEW Percent_Population_Vaccinated AS
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations
+, SUM(vac.new_vaccinations) OVER (Partition BY dea.location ORDER BY dea.location, dea.date) as rolling_people_vaccinated
+FROM `my-project-2-380811.Covid_data.Covid_deaths` dea
+JOIN `my-project-2-380811.Covid_data.Covid_vaccinations` vac
+    ON dea.location = vac.location
+    AND dea.date = vac.date
+WHERE dea.continent is not null
